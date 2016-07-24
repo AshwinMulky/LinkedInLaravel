@@ -30,10 +30,12 @@ class JWTAuthenticationController extends Controller
      public function signup(Request $request)
     {
 
-        $credentials = $request->only('name','email','password');
+        $signupdata = $request->only('user_name', 'email', 'password', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone', 'website');
 
            try {
-               $user = User::create($credentials);
+               
+               $user = User::create($signupdata);
+
            } catch (Exception $e) {
                return response()->json(['error' => 'User already exists.'], HttpResponse::HTTP_CONFLICT);
            }
