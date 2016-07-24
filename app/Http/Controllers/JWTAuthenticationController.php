@@ -30,7 +30,11 @@ class JWTAuthenticationController extends Controller
      public function signup(Request $request)
     {
 
-        $signupdata = $request->only('user_name', 'email', 'password', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone', 'website');
+        $password = bcrypt($request->password);
+
+        $signupdata = $request->only('user_name', 'email', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone', 'website');
+
+        $signupdata['password'] = $password;
 
            try {
                

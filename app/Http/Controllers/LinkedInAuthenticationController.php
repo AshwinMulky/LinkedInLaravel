@@ -34,7 +34,9 @@ class LinkedInAuthenticationController extends Controller
         
 
         try {
+            
            $user = Socialite::driver('linkedin')->user();
+
         } catch (Exception $e) {
             return view('error');
         }
