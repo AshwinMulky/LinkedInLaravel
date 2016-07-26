@@ -41,9 +41,9 @@ class LinkedInAuthenticationController extends Controller
             return view('error');
         }
 
-        // $user->token;
+        // $user->token; //Linkedin access token
 
-        $authUser = $this->findOrCreateUser($user);
+       $authUser = $this->findOrCreateUser($user);
 
        $token = \JWTAuth::fromUser($user);
 
@@ -64,10 +64,10 @@ class LinkedInAuthenticationController extends Controller
             return $authUser;
         }
 
-        return User::create([
+       /* return User::create([
             'linkedin_id' => $linkedinUser->getId(),
             'name' => $linkedinUser->getName(),
             'email' => $linkedinUser->getEmail(),
-        ]);
+        ]);*/
     }
 }

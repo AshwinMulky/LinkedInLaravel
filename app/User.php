@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'user_name', 'email', 'password', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone', 'website', 'avatar_url'
+        'linkedin_id', 'user_name', 'email', 'password', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone', 'website', 'avatar_url', 'user_type'
     ];
 
     /**
@@ -38,5 +38,10 @@ class User extends Authenticatable
     public function companies()
     {
         return $this->hasMany(User_Company::class);
+    }
+
+    public function linkedin_profile()
+    {
+        return $this->hasOne(LinkedIn_User::class);
     }
 }

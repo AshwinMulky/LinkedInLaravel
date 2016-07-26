@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
 
+
 class JWTAuthenticationController extends Controller
 {
      public function authenticate(Request $request)
@@ -29,6 +30,21 @@ class JWTAuthenticationController extends Controller
 
      public function signup(Request $request)
     {
+
+         $validation = \Validator::make($request->all(), [
+              'user_name' => 'required',
+              'first_name' => 'required',
+              'email' => 'required|email',
+              'dob' => 'required',
+              'sex' => 'required',
+              'phone' => 'digits_between:10,12'
+          ]);
+         
+
+         if($validation->fails())
+         {
+            return $validation->errors();
+         }
 
         $password = bcrypt($request->password);
 

@@ -13,9 +13,10 @@
 
 Route::get('/', function () {
     return view('welcome');
+	//return $errors;
 });
 
-Route::group(['prefix' => 'api'], function(){
+Route::group(['prefix' => 'api', 'middleware' => ['interceptor']], function(){
 	
 	Route::post('authenticate','JWTAuthenticationController@authenticate');
 	Route::post('signup', 'JWTAuthenticationController@signup');
