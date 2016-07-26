@@ -34,10 +34,10 @@ class JWTAuthenticationController extends Controller
          $validation = \Validator::make($request->all(), [
               'user_name' => 'required',
               'first_name' => 'required',
-              'email' => 'required|email',
+              'email' => 'required|email|unique:users,email',
               'dob' => 'required',
               'sex' => 'required',
-              'phone' => 'digits_between:10,12'
+              'phone' => 'required|digits_between:10,12'
           ]);
          
 
@@ -55,6 +55,13 @@ class JWTAuthenticationController extends Controller
            try {
                
                $user = User::create($signupdata);
+
+               /*if(!empty($signupdata->skills))
+               {
+                  $user_skills = User_Skills::create($signupdata->skills);
+
+                  $user->skills()->save($user_skills);
+               }*/
 
            } catch (Exception $e) {
                return response()->json(['error' => 'User already exists.'], HttpResponse::HTTP_CONFLICT);
