@@ -45,11 +45,11 @@ class LinkedInAuthenticationController extends Controller
 
        $authUser = $this->findOrCreateUser($user);
 
-       $token = \JWTAuth::fromUser($user);
+       $authUser = $this->updateFullProfile($authUser);
 
-       return response()->json(compact('token'));
+       $token = \JWTAuth::fromUser($authUser);
 
-        
+       return response()->json(compact('token'));   
     }
 
      /**
@@ -64,10 +64,20 @@ class LinkedInAuthenticationController extends Controller
             return $authUser;
         }
 
-       /* return User::create([
+       $user = User::create([
             'linkedin_id' => $linkedinUser->getId(),
             'name' => $linkedinUser->getName(),
             'email' => $linkedinUser->getEmail(),
-        ]);*/
+        ]);
+
+        return $user;
     }
+
+    private function updateFullProfile($authUser)
+    {
+
+        //update full profile/ all linked in tables
+        return $authUser;
+    }
+    
 }

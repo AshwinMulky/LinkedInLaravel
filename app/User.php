@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'linkedin_id', 'user_name', 'email', 'password', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'user_type', 'phone_number_mobile', 'phone_number_home', 'phone_number_work', 'twitter_account_name1', 'twitter_account_name1'
+         'linkedin_id', 'user_name', 'email', 'password', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'user_type', 'phone_number_mobile', 'phone_number_home', 'phone_number_work', 'twitter_account_name1', 'twitter_account_name1'
     ];
 
     /**
@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at'
     ];
 
 

@@ -41,9 +41,9 @@ class JWTAuthenticationController extends Controller
               'last_name'=> 'sometimes|required',
               'email' => 'required|email|unique:users,email',
               'dob' => 'required',
-              'sex' => 'sometimes|required',
+              'sex' => 'required',
               'nationality'=> 'sometimes|required',
-              'user_type'=> 'sometimes|required',
+              'user_type'=> 'required',
               'phone_number_mobile' => 'digits_between:10,12',
               'phone_number_home' => 'digits_between:10,12',
               'phone_number_work' => 'digits_between:10,12',
@@ -60,7 +60,7 @@ class JWTAuthenticationController extends Controller
 
         $password = bcrypt($request->password);
 
-        $signupdata = $request->only('user_name', 'email', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'user_type', 'phone_number_mobile', 'phone_number_home', 'phone_number_work', 'twitter_account_name1', 'twitter_account_name2');
+        $signupdata = $request->except('password');
 
         $signupdata['password'] = $password;
 

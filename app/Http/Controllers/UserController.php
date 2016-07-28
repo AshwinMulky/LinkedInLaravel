@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User_Education;
 use App\User_Skill;
+use App\User_Company;
 
 use DB;
 
@@ -59,7 +60,7 @@ class UserController extends Controller
         $user = \JWTAuth::parseToken()->toUser();
 
         $validation = \Validator::make($request->all(), [
-              'skill_name' => 'sometimes|required',
+              'skill_name' => 'required',
               'experience_year' => 'sometimes|required',
               'experience_months' => 'sometimes|required',
               'experience_level'=> 'sometimes|required'
@@ -86,15 +87,18 @@ class UserController extends Controller
         return $this->getUserDetails($user);
     }
 
-   /* public function updateSkill(Request $request)
+    public function updateEducation(Request $request)
     {
         $user = \JWTAuth::parseToken()->toUser();
 
         $validation = \Validator::make($request->all(), [
-              'skill_name' => 'sometimes|required',
-              'experience_year' => 'sometimes|required',
-              'experience_months' => 'sometimes|required',
-              'experience_level'=> 'sometimes|required'
+              'school_name' => 'required',
+              'field_of_study' => 'sometimes|required',
+              'start_date' => 'sometimes|required',
+              'end_date'=> 'sometimes|required',
+              'degree' => 'sometimes|required',
+              'activities' => 'sometimes|required',
+              'notes'=> 'sometimes|required'
           ]);
 
          if($validation->fails())
@@ -102,15 +106,115 @@ class UserController extends Controller
             return $validation->errors();
          }
 
+         $user_education = $user->educations()->where('school_name', $request->school_name)->first();
+
+        if(!empty($user_education))
+        {
+            $this->updateEducationFromRequest($request, $user_education);
+        }
+        else
+        {
+            $user_education = User_Education::create($request->all());
+
+            $user->educations()->save($user_education);
+        }
         
-        $user_skill = $user->skills()->where('skill_name', $request->skill_name)->first();
-
-        $this->updateSkillFromRequest($request, $user_skill);
-
         return $this->getUserDetails($user);
-    }*/
+    }
 
-    public function updateSkillFromRequest(Request $request, $user_skill)
+    public function updateCompany(Request $request)
+    {
+        $user = \JWTAuth::parseToken()->toUser();
+
+        $validation = \Validator::make($request->all(), [
+              'company_name' => 'required',
+              'company_type' => 'sometimes|required',
+              'designation' => 'sometimes|required'
+          ]);
+
+         if($validation->fails())
+         {
+            return $validation->errors();
+         }
+
+         $user_company = $user->companies()->where('company_name', $request->company_name)->first();
+
+        if(!empty($user_company))
+        {
+            $this->updateCompanyFromRequest($request, $user_company);
+        }
+        else
+        {
+            $user_company = User_Company::create($request->all());
+
+            $user->companies()->save($user_company);
+        }
+        
+        return $this->getUserDetails($user);
+    }
+
+    private function updateCompanyFromRequest(Request $request, $user_company)
+    {
+        if(!empty($request->company_name))
+        {
+            $user_company->company_name = $request->company_name;
+        }
+
+        if(!empty($request->company_type))
+        {
+            $user_company->company_type = $request->company_type;
+        }
+
+        if(!empty($request->designation))
+        {
+            $user_company->designation = $request->designation;
+        }
+
+        $user_company->save();
+    }
+
+
+    private function updateEducationFromRequest(Request $request, $user_education)
+    {
+        if(!empty($request->school_name))
+        {
+            $user_education->school_name = $request->school_name;
+        }
+
+        if(!empty($request->field_of_study))
+        {
+            $user_education->field_of_study = $request->field_of_study;
+        }
+
+        if(!empty($request->start_date))
+        {
+            $user_education->start_date = $request->start_date;
+        }
+
+        if(!empty($request->end_date))
+        {
+            $user_education->end_date = $request->end_date;
+        }
+
+        if(!empty($request->degree))
+        {
+            $user_education->degree = $request->degree;
+        }
+
+        if(!empty($request->activities))
+        {
+            $user_education->activities = $request->activities;
+        }
+
+        if(!empty($request->notes))
+        {
+            $user_education->notes = $request->notes;
+        }
+
+        $user_education->save();
+    }
+
+    private function updateSkillFromRequest(Request $request, $user_skill)
     {
         if(!empty($request->skill_name))
         {
@@ -135,7 +239,7 @@ class UserController extends Controller
         $user_skill->save();
     }
 
-    public function updateUser($user, Request $request)
+    private function updateUser($user, Request $request)
     {
         if(!empty($request->user_name))
         {
@@ -212,7 +316,7 @@ class UserController extends Controller
         return $this->getUserDetails($user);
     }
 
-    public function getUserDetails($user)
+    private function getUserDetails($user)
     {
         $user->load('educations', 'skills', 'companies');
 
