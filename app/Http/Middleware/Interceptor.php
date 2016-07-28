@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Log;
+use Log;
 
 use Closure;
 
@@ -20,9 +20,7 @@ class Interceptor
 
         //Do logging
 
-        //Log::info('We got a hit : '.$request);
-
-       // echo "hello";
+        Log::info('We got a hit : '.$request);
 
         return $next($request);
     }

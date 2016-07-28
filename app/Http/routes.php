@@ -22,6 +22,9 @@ Route::group(['prefix' => 'api', 'middleware' => ['interceptor']], function(){
 	Route::post('signup', 'JWTAuthenticationController@signup');
 
 	Route::get('me', 'UserController@index');
+	Route::post('update_user', 'UserController@updateUserDetails');
+	Route::post('update_skills', 'UserController@updateSkills');
+	Route::post('update_educations', 'UserController@updateEducations');
 
 
 	Route::get('auth/linkedin', 'LinkedInAuthenticationController@redirectToProvider');
