@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateLinkedInContactInformationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,24 +12,14 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('linked_in__contact__informations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('linkedin_id');
-            $table->string('user_name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('dob');
-            $table->string('sex');
-            $table->string('nationality');
-            $table->string('user_type');
+            $table->integer('linkedin_id');
             $table->string('phone_number_mobile');
             $table->string('phone_number_home');
             $table->string('phone_number_work');
             $table->string('twitter_account_name1');
             $table->string('twitter_account_name2');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -41,6 +31,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('users');
+        Schema::drop('linked_in__contact__informations');
     }
 }

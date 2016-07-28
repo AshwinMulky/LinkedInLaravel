@@ -14,6 +14,7 @@ class CreateLinkedInEducationsTable extends Migration
     {
         Schema::create('linked_in__educations', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('linkedin_id');
             $table->integer('educations_id');
             $table->string('school-name');
             $table->string('field-of-study');

@@ -16,6 +16,7 @@ class CreateUserCompaniesTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('company_name');
+            $table->string('company_type');
             $table->string('designation');
             $table->timestamps();
         });

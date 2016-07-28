@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\User;
+use App\User_Skill;
+use App\User_Education;
+use App\User_Company;
+use Log;
 
 
 class JWTAuthenticationController extends Controller
@@ -37,7 +41,10 @@ class JWTAuthenticationController extends Controller
               'email' => 'required|email|unique:users,email',
               'dob' => 'required',
               'sex' => 'required',
-              'phone' => 'required|digits_between:10,12'
+              'phone_number_mobile' => 'digits_between:10,12',
+              'phone_number_home' => 'digits_between:10,12',
+              'phone_number_work' => 'digits_between:10,12',
+              'password' => 'required'
           ]);
          
 
@@ -48,7 +55,7 @@ class JWTAuthenticationController extends Controller
 
         $password = bcrypt($request->password);
 
-        $signupdata = $request->only('user_name', 'email', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone', 'website');
+        $signupdata = $request->only('user_name', 'email', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'user_type', 'phone_number_mobile', 'phone_number_home', 'phone_number_work', 'twitter_account_name1', 'twitter_account_name1');
 
         $signupdata['password'] = $password;
 
@@ -56,12 +63,36 @@ class JWTAuthenticationController extends Controller
                
                $user = User::create($signupdata);
 
-               /*if(!empty($signupdata->skills))
+               if(!empty($request->skills))
                {
-                  $user_skills = User_Skills::create($signupdata->skills);
+                //Log::info($request->skills[0]['skill_name']);
+                  foreach ($request->skills as $skill) {
+                    $user_skill = User_Skill::create($skill);
 
-                  $user->skills()->save($user_skills);
-               }*/
+                    $user->skills()->save($user_skill);
+                  }
+                  //
+               }
+
+               if(!empty($request->educations))
+               {
+                  foreach ($request->educations as $education) {
+                    $user_education = User_Education::create($education);
+
+                    $user->educations()->save($user_education);
+                  }
+                  //
+               }
+
+               if(!empty($request->companies))
+               {
+                  foreach ($request->companies as $company) {
+                    $user_company = User_Company::create($company);
+
+                    $user->companies()->save($user_company);
+                  }
+                  //
+               }
 
            } catch (Exception $e) {
                return response()->json(['error' => 'User already exists.'], HttpResponse::HTTP_CONFLICT);

@@ -14,6 +14,7 @@ class CreateLinkedInCertificationsTable extends Migration
     {
         Schema::create('linked_in__certifications', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('linkedin_id');
             $table->integer('certifications_id');
             $table->string('name');
             $table->string('authority_name');

@@ -14,7 +14,9 @@ class CreateLinkedInPositionsTable extends Migration
     {
         Schema::create('linked_in__positions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('linkedin_id');
             $table->integer('positions_id');
+            $table->string('positions_type');//past or current
             $table->string('title');
             $table->text('summary');
             $table->string('start-date');

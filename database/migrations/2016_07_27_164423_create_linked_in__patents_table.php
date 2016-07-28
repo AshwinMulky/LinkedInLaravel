@@ -14,6 +14,7 @@ class CreateLinkedInPatentsTable extends Migration
     {
         Schema::create('linked_in__patents', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('linkedin_id');
             $table->integer('patents_id');
             $table->string('title');
             $table->text('summary');

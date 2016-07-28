@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompaniesTable extends Migration
+class CreateLinkedInCompanyProfilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('linked_in__company__profiles', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id');
             $table->string('company_name'); 
@@ -49,6 +49,7 @@ class CreateCompaniesTable extends Migration
             $table->string('stock-exchange');       
             $table->string('founded-year');     
             $table->string('end-year');     
+            $table->string('num-followers');
             $table->timestamps();
         });
     }
@@ -60,6 +61,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('companies');
+        Schema::drop('linked_in__company__profiles');
     }
 }

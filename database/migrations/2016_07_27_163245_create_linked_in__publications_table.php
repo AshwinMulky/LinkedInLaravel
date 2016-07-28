@@ -14,6 +14,7 @@ class CreateLinkedInPublicationsTable extends Migration
     {
         Schema::create('linked_in__publications', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('linkedin_id');
             $table->integer('publications_id');
             $table->text('title');
             $table->string('publisher_name');

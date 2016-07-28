@@ -15,11 +15,14 @@ class CreateUserEducationsTable extends Migration
         Schema::create('user__educations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->string('college_name');
-            $table->string('university_name');
-            $table->string('course');
-            $table->integer('year_of_passing');
-
+            $table->integer('educations_id');
+            $table->string('school-name');
+            $table->string('field-of-study');
+            $table->string('start-date');
+            $table->string('end-date');
+            $table->string('degree');
+            $table->string('activities');
+            $table->text('notes');
             $table->timestamps();
         });
     }
