@@ -23,7 +23,8 @@ Route::group(['prefix' => 'api', 'middleware' => ['interceptor']], function(){
 
 	Route::get('me', 'UserController@index');
 	Route::post('update_user', 'UserController@updateUserDetails');
-	Route::post('update_skills', 'UserController@updateSkills');
+	Route::post('update_skill', 'UserController@updateSkill');
+	Route::post('add_skill', 'UserController@addSkill');
 	Route::post('update_educations', 'UserController@updateEducations');
 
 

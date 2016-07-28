@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\User_Education;
+use App\User_Skill;
+
+use DB;
 
 class UserController extends Controller
 {
@@ -49,6 +52,87 @@ class UserController extends Controller
 
          return $this->updateUser($user, $request);
 
+    }
+
+    public function updateSkill(Request $request)
+    {
+        $user = \JWTAuth::parseToken()->toUser();
+
+        $validation = \Validator::make($request->all(), [
+              'skill_name' => 'sometimes|required',
+              'experience_year' => 'sometimes|required',
+              'experience_months' => 'sometimes|required',
+              'experience_level'=> 'sometimes|required'
+          ]);
+
+         if($validation->fails())
+         {
+            return $validation->errors();
+         }
+
+        $user_skill = $user->skills()->where('skill_name', $request->skill_name)->first();
+
+        if(!empty($user_skill))
+        {
+            $this->updateSkillFromRequest($request, $user_skill);
+        }
+        else
+        {
+            $user_skill = User_Skill::create($request->all());
+
+            $user->skills()->save($user_skill);
+        }
+        
+        return $this->getUserDetails($user);
+    }
+
+   /* public function updateSkill(Request $request)
+    {
+        $user = \JWTAuth::parseToken()->toUser();
+
+        $validation = \Validator::make($request->all(), [
+              'skill_name' => 'sometimes|required',
+              'experience_year' => 'sometimes|required',
+              'experience_months' => 'sometimes|required',
+              'experience_level'=> 'sometimes|required'
+          ]);
+
+         if($validation->fails())
+         {
+            return $validation->errors();
+         }
+
+        
+        $user_skill = $user->skills()->where('skill_name', $request->skill_name)->first();
+
+        $this->updateSkillFromRequest($request, $user_skill);
+
+        return $this->getUserDetails($user);
+    }*/
+
+    public function updateSkillFromRequest(Request $request, $user_skill)
+    {
+        if(!empty($request->skill_name))
+        {
+            $user_skill->skill_name = $request->skill_name;
+        }
+
+        if(!empty($request->experience_year))
+        {
+            $user_skill->experience_year = $request->experience_year;
+        }
+
+        if(!empty($request->experience_months))
+        {
+            $user_skill->experience_months = $request->experience_months;
+        }
+
+        if(!empty($request->experience_level))
+        {
+            $user_skill->experience_level = $request->experience_level;
+        }
+
+        $user_skill->save();
     }
 
     public function updateUser($user, Request $request)
