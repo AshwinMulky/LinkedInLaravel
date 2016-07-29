@@ -20,30 +20,49 @@ class UserController extends Controller
 
     public function index()
     {
+
     	$user = \JWTAuth::parseToken()->toUser();
 
     	return $this->getUserDetails($user);
     }
 
-    public function updateUserDetails(Request $request)
+    
+    public function updateDetails(Request $request)
     {
         $user = \JWTAuth::parseToken()->toUser();
 
         $validation = \Validator::make($request->all(), [
-              'user_name' => 'sometimes|required',
-              'first_name' => 'sometimes|required',
-              'last_name'=> 'sometimes|required',
-              'email' => 'sometimes|required|email|unique:users,email,'.$user->id,
-              'dob' => 'sometimes|required',
-              'sex' => 'sometimes|required',
-              'nationality'=> 'sometimes|required',
-              'user_type'=> 'sometimes|required',
-              'phone_number_mobile' => 'sometimes|required|digits_between:10,12',
-              'phone_number_home' => 'sometimes|required|digits_between:10,12',
-              'phone_number_work' => 'sometimes|required|digits_between:10,12',
+
+              'user_type'=> 'required|in:Trainer,User,Company',
+
+              'user_name' => 'sometimes|required_if:user_type,Trainer',
+              'first_name' => 'sometimes|required_if:user_type,Trainer',
+              'last_name'=> 'sometimes|required_if:user_type,Trainer',
+              'email' => 'sometimes|required_if:user_type,Trainer|email|unique:users,email,'.$user->id,
+              'dob' => 'sometimes|required_if:user_type,Trainer',
+              'sex' => 'sometimes|required_if:user_type,Trainer',
+              'nationality'=> 'sometimes|required_if:user_type,Trainer',
+              
+              'phone_number_mobile' => 'sometimes|required_if:user_type,Trainer|digits_between:10,12',
+              'phone_number_home' => 'sometimes|required_if:user_type,Trainer|digits_between:10,12',
+              'phone_number_work' => 'sometimes|required_if:user_type,Trainer|digits_between:10,12',
               'twitter_account_name1'=> 'sometimes|required',
               'twitter_account_name2'=> 'sometimes|required',
-              'password' => 'sometimes|required'
+              'password' => 'sometimes|required',
+
+              'company_name' => 'sometimes|required_if:user_type,Company',
+              'company_type'=> 'sometimes|required_if:user_type,Company',
+              'website_url' => 'sometimes|required_if:user_type,Company',
+              'industries'=> 'sometimes|required_if:user_type,Company',
+              'company_phone1' => 'sometimes|required_if:user_type,Company|digits_between:10,12',
+              'company_phone2' => 'sometimes|required_if:user_type,Company|digits_between:10,12',
+              'company_fax' => 'sometimes|required_if:user_type,Company',
+              'employee_count_range'=> 'sometimes|required_if:user_type,Company',
+              'specialties'=> 'sometimes|required_if:user_type,Company',
+              'locations' => 'sometimes|required_if:user_type,Company',
+              'description'=> 'sometimes|required_if:user_type,Company',
+              'stock_exchange'=> 'sometimes|required_if:user_type,Company',
+              'founded_year'=> 'sometimes|required_if:user_type,Company',
           ]);
 
         if($validation->fails())
@@ -51,11 +70,20 @@ class UserController extends Controller
             return $validation->errors();
          }
 
-         return $this->updateUser($user, $request);
+         if($user->user_type == 'Trainer')
+        {
+            return $this->updateUser($user, $request);
+        }
+        else//company
+        {
+            return $this->updateCompany($user, $request);
+        }
 
     }
 
-    public function updateSkill(Request $request)
+    
+
+    public function updateUserSkill(Request $request)
     {
         $user = \JWTAuth::parseToken()->toUser();
 
@@ -87,7 +115,7 @@ class UserController extends Controller
         return $this->getUserDetails($user);
     }
 
-    public function updateEducation(Request $request)
+    public function updateUserEducation(Request $request)
     {
         $user = \JWTAuth::parseToken()->toUser();
 
@@ -122,7 +150,7 @@ class UserController extends Controller
         return $this->getUserDetails($user);
     }
 
-    public function updateCompany(Request $request)
+    public function updateUserCompany(Request $request)
     {
         $user = \JWTAuth::parseToken()->toUser();
 
@@ -155,11 +183,6 @@ class UserController extends Controller
 
     private function updateCompanyFromRequest(Request $request, $user_company)
     {
-        if(!empty($request->company_name))
-        {
-            $user_company->company_name = $request->company_name;
-        }
-
         if(!empty($request->company_type))
         {
             $user_company->company_type = $request->company_type;
@@ -176,11 +199,6 @@ class UserController extends Controller
 
     private function updateEducationFromRequest(Request $request, $user_education)
     {
-        if(!empty($request->school_name))
-        {
-            $user_education->school_name = $request->school_name;
-        }
-
         if(!empty($request->field_of_study))
         {
             $user_education->field_of_study = $request->field_of_study;
@@ -216,11 +234,6 @@ class UserController extends Controller
 
     private function updateSkillFromRequest(Request $request, $user_skill)
     {
-        if(!empty($request->skill_name))
-        {
-            $user_skill->skill_name = $request->skill_name;
-        }
-
         if(!empty($request->experience_year))
         {
             $user_skill->experience_year = $request->experience_year;
@@ -276,10 +289,10 @@ class UserController extends Controller
             $user->nationality = $request->nationality;
         }
 
-        if(!empty($request->user_type))
+        /*if(!empty($request->user_type))
         {
             $user->user_type = $request->user_type;
-        }
+        }*/
 
         if(!empty($request->phone_number_mobile))
         {
@@ -316,10 +329,119 @@ class UserController extends Controller
         return $this->getUserDetails($user);
     }
 
+    private function updateCompany($user, Request $request)
+    {
+        if(!empty($request->company_name))
+        {
+            $user->company_name = $request->company_name;
+        }
+
+        if(!empty($request->company_type))
+        {
+            $user->company_type = $request->company_type;
+        }
+
+        if(!empty($request->website_url))
+        {
+            $user->website_url = $request->website_url;
+        }
+
+        if(!empty($request->email))
+        {
+            $user->email = $request->email;
+        }
+
+        if(!empty($request->industries))
+        {
+            $user->industries = $request->industries;
+        }
+
+        if(!empty($request->company_phone1))
+        {
+            $user->company_phone1 = $request->company_phone1;
+        }
+
+        if(!empty($request->company_phone2))
+        {
+            $user->company_phone2 = $request->company_phone2;
+        }
+
+        if(!empty($request->company_fax))
+        {
+            $user->company_fax = $request->company_fax;
+        }
+
+        if(!empty($request->employee_count_range))
+        {
+            $user->employee_count_range = $request->employee_count_range;
+        }
+
+        if(!empty($request->specialties))
+        {
+            $user->specialties = $request->specialties;
+        }
+
+        if(!empty($request->locations))
+        {
+            $user->locations = $request->locations;
+        }
+
+        if(!empty($request->twitter_account_name1))
+        {
+            $user->twitter_account_name1 = $request->twitter_account_name1;
+        }
+
+        if(!empty($request->twitter_account_name2))
+        {
+            $user->twitter_account_name2 = $request->twitter_account_name2;
+        }
+
+        if(!empty($request->password))
+        {
+            $user->password = bcrypt($request->password);
+        }
+
+        if(!empty($request->description))
+        {
+            $user->description = bcrypt($request->description);
+        }
+
+        if(!empty($request->stock_exchange))
+        {
+            $user->stock_exchange = bcrypt($request->stock_exchange);
+        }
+
+        if(!empty($request->founded_year))
+        {
+            $user->founded_year = bcrypt($request->founded_year);
+        }
+
+        $user->save();
+
+        return $this->getUserDetails($user);
+    }
+
     private function getUserDetails($user)
     {
         $user->load('educations', 'skills', 'companies');
 
+        $user = $this->hideUserFields($user);
+
         return response()->json(compact('user'));
+    }
+
+    public function hideUserFields($user)
+    {
+        if($user->user_type == 'Trainer')
+        {
+            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'company_name', 'company_type', 'website_url', 'industries', 'employee_count_range', 'specialties', 'locations', 'company_phone1', 'company_phone2', 'company_fax', 'description', 'stock_exchange', 'founded_year']);
+        }
+
+        if($user->user_type == 'Company')
+        {
+            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'user_name', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone_number_mobile', 'phone_number_home', 'phone_number_work','educations','skills','companies']);
+        }
+        
+        return $user;
     }
 }

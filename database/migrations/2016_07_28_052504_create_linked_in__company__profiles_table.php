@@ -14,7 +14,7 @@ class CreateLinkedInCompanyProfilesTable extends Migration
     {
         Schema::create('linked_in__company__profiles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('company_id');
+            $table->integer('company_linkedin_id');
             $table->string('company_name'); 
             $table->string('universal-name');   
             $table->text('email-domains');  

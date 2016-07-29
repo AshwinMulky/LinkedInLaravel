@@ -15,6 +15,7 @@ class CreateUserCompaniesTable extends Migration
         Schema::create('user__companies', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
+            $table->integer('linkedin_id');
             $table->string('company_name');
             $table->string('company_type');
             $table->string('designation');

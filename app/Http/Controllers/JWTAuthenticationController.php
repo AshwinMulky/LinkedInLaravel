@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\User;
+use App\Company;
 use App\User_Skill;
 use App\User_Education;
 use App\User_Company;
@@ -19,6 +20,8 @@ class JWTAuthenticationController extends Controller
     	$credentials = $request->only('email', 'password');
 
         try {
+
+          /// \Config::set('jwt.user' , "App\User");
             // verify the credentials and create a token for the user
             if (! $token = \JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 401);
@@ -32,24 +35,39 @@ class JWTAuthenticationController extends Controller
         return response()->json(compact('token'));
     }
 
-     public function signup(Request $request)
+    public function signup(Request $request)
     {
 
          $validation = \Validator::make($request->all(), [
-              'user_name' => 'required',
-              'first_name' => 'required',
-              'last_name'=> 'sometimes|required',
-              'email' => 'required|email|unique:users,email',
-              'dob' => 'required',
-              'sex' => 'required',
-              'nationality'=> 'sometimes|required',
-              'user_type'=> 'required',
-              'phone_number_mobile' => 'digits_between:10,12',
-              'phone_number_home' => 'digits_between:10,12',
-              'phone_number_work' => 'digits_between:10,12',
-              'twitter_account_name1'=> 'sometimes|required',
-              'twitter_account_name2'=> 'sometimes|required',
-              'password' => 'required'
+              'user_type'=> 'required|in:Trainer,Company,User',
+              'password' => 'required',
+
+              'user_name' => 'required_if:user_type,Trainer',
+              'first_name' => 'required_with:user_name',
+              'last_name'=> 'sometimes|required_with:user_name',
+              'email' => 'required_with:user_name|email|unique:users,email',
+              'dob' => 'required_with:user_name',
+              'sex' => 'required_with:user_name|in:M,F,NA',
+              'nationality'=> 'sometimes|required_with:user_name',              
+              'phone_number_mobile' => 'sometimes|required_with:user_name|digits_between:10,12',
+              'phone_number_home' => 'sometimes|required_with:user_name|digits_between:10,12',
+              'phone_number_work' => 'sometimes|required_with:user_name|digits_between:10,12',
+              'twitter_account_name1'=> 'sometimes|required_with:user_name',
+              'twitter_account_name2'=> 'sometimes|required_with:user_name',
+
+              'company_name' => 'required_if:user_type,Company',
+              'company_type'=> 'sometimes|required_with:company_name',
+              'website_url' => 'sometimes|required_with:company_name',
+              'industries'=> 'sometimes|required_with:company_name',
+              'company_phone1' => 'sometimes|required_with:company_name|digits_between:10,12',
+              'company_phone2' => 'sometimes|required_with:company_name|digits_between:10,12',
+              'company_fax' => 'sometimes|required_with:company_name',
+              'employee_count_range'=> 'sometimes|required_with:company_name',
+              'specialties'=> 'sometimes|required_with:company_name',
+              'locations' => 'required_with:company_name',
+              'description'=> 'sometimes|required_with:company_name',
+              'stock_exchange'=> 'sometimes|required_with:company_name',
+              'founded_year'=> 'sometimes|required_with:company_name',
           ]);
          
 
@@ -68,7 +86,9 @@ class JWTAuthenticationController extends Controller
                
                $user = User::create($signupdata);
 
-               if(!empty($request->skills))
+               //different api calls are provided for the below updates
+
+               /*if(!empty($request->skills))
                {
                 //Log::info($request->skills[0]['skill_name']);
                   foreach ($request->skills as $skill) {
@@ -97,7 +117,7 @@ class JWTAuthenticationController extends Controller
                     $user->companies()->save($user_company);
                   }
                   //
-               }
+               }*/
 
            } catch (Exception $e) {
                return response()->json(['error' => 'User already exists.'], HttpResponse::HTTP_CONFLICT);
@@ -107,4 +127,6 @@ class JWTAuthenticationController extends Controller
 
            return response()->json(compact('token'));
     }
+
+    
 }

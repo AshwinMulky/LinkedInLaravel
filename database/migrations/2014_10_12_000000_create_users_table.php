@@ -29,6 +29,20 @@ class CreateUsersTable extends Migration
             $table->string('phone_number_work');
             $table->string('twitter_account_name1');
             $table->string('twitter_account_name2');
+
+            $table->string('company_name');   
+            $table->string('company_type');       
+            $table->string('website_url');      
+            $table->string('industries');                            
+            $table->string('employee_count_range');     
+            $table->text('specialties');    
+            $table->text('locations');  
+            $table->string('company_phone1');     
+            $table->string('company_phone2');     
+            $table->string('company_fax');        
+            $table->text('description');        
+            $table->string('stock_exchange');       
+            $table->string('founded_year');
             $table->rememberToken();
             $table->timestamps();
         });
