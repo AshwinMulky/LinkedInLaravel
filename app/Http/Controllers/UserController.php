@@ -70,13 +70,13 @@ class UserController extends Controller
             return $validation->errors();
          }
 
-         if($user->user_type == 'Trainer')
+        if($user->user_type == 'Company')
+        {    
+            return $this->updateCompany($user, $request);
+        }
+        else//Trainer or User
         {
             return $this->updateUser($user, $request);
-        }
-        else//company
-        {
-            return $this->updateCompany($user, $request);
         }
 
     }
@@ -430,16 +430,19 @@ class UserController extends Controller
         return response()->json(compact('user'));
     }
 
+    /*
+     *
+     */
     public function hideUserFields($user)
     {
-        if($user->user_type == 'Trainer')
-        {
-            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'company_name', 'company_type', 'website_url', 'industries', 'employee_count_range', 'specialties', 'locations', 'company_phone1', 'company_phone2', 'company_fax', 'description', 'stock_exchange', 'founded_year']);
-        }
 
         if($user->user_type == 'Company')
         {
             $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'user_name', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone_number_mobile', 'phone_number_home', 'phone_number_work','educations','skills','companies']);
+        }
+        else
+        {
+            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'company_name', 'company_type', 'website_url', 'industries', 'employee_count_range', 'specialties', 'locations', 'company_phone1', 'company_phone2', 'company_fax', 'description', 'stock_exchange', 'founded_year']);
         }
         
         return $user;
