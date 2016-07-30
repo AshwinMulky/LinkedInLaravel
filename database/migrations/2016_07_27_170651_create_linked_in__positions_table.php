@@ -14,14 +14,14 @@ class CreateLinkedInPositionsTable extends Migration
     {
         Schema::create('linked_in__positions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('linkedin_id');
+            $table->string('linkedin_id');
             $table->integer('positions_id');
             $table->string('positions_type');//past or current
             $table->string('title');
             $table->text('summary');
-            $table->string('start-date');
-            $table->string('end-date');
-            $table->string('is-current');
+            $table->string('start_date');
+            $table->string('end_date');
+            $table->string('is_current');
             $table->string('company');
             $table->timestamps();
         });

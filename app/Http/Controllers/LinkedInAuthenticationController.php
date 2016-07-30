@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\User;
+use App\LinkedIn_User;
 
 use Socialite;
 
@@ -45,7 +46,7 @@ class LinkedInAuthenticationController extends Controller
 
        $authUser = $this->findOrCreateUser($user);
 
-       $authUser = $this->updateFullProfile($authUser);
+       $authUser = $this->updateFullProfile($authUser, $user->token);
 
        $token = \JWTAuth::fromUser($authUser);
 
@@ -65,19 +66,38 @@ class LinkedInAuthenticationController extends Controller
         }
 
        $user = User::create([
-            'linkedin_id' => $linkedinUser->getId(),
-            'name' => $linkedinUser->getName(),
+            'user_name' => $linkedinUser->getName(),
             'email' => $linkedinUser->getEmail(),
+            'linkedin_id' => $linkedinUser->id
         ]);
 
         return $user;
     }
 
-    private function updateFullProfile($authUser)
+    private function updateFullProfile($authUser, $token)
     {
 
         //update full profile/ all linked in tables
+
+       // $response = $this->linkedInResponse();
+
+        $linkedInUser = Linkedin_User::create([
+            'interests' => 'int123'
+        ]);
+
+        $authUser->linkedin_profile()->save($linkedInUser);
+
         return $authUser;
     }
+
+   /* private function linkedInResponse()
+    {
+        //$response->interests = "interest123";
+
+         $response = (object)array('interests'=>'int123'
+            );
+
+        return $response;
+    }*/
     
 }

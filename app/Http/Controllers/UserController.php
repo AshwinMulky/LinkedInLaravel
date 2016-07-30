@@ -423,7 +423,7 @@ class UserController extends Controller
 
     private function getUserDetails($user)
     {
-        $user->load('educations', 'skills', 'companies');
+        $user->load('educations', 'skills', 'companies', 'linkedin_profile', 'linkedin_profile.contact_info', 'linkedin_profile.publications', 'linkedin_profile.patents', 'linkedin_profile.languages', 'linkedin_profile.skills', 'linkedin_profile.certifications', 'linkedin_profile.educations', 'linkedin_profile.courses', 'linkedin_profile.volunteer', 'linkedin_profile.postions', 'linkedin_profile.recommendations');
 
         $user = $this->hideUserFields($user);
 
@@ -431,7 +431,7 @@ class UserController extends Controller
     }
 
     /*
-     *
+     *  
      */
     public function hideUserFields($user)
     {

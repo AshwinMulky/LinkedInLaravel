@@ -14,7 +14,7 @@ class CreateLinkedInContactInformationsTable extends Migration
     {
         Schema::create('linked_in__contact__informations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('linkedin_id');
+            $table->string('linkedin_id');
             $table->string('phone_number_mobile');
             $table->string('phone_number_home');
             $table->string('phone_number_work');

@@ -14,10 +14,10 @@ class CreateLinkedInRecommendationsTable extends Migration
     {
         Schema::create('linked_in__recommendations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('linkedin_id');
+            $table->string('linkedin_id');
             $table->integer('recommendations_id');
-            $table->string('recommendation-type');
-            $table->text('recommendation-text');
+            $table->string('recommendation_type');
+            $table->text('recommendation_text');
             $table->string('recommender');
             $table->timestamps();
         });

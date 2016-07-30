@@ -14,7 +14,7 @@ class CreateLinkedInVolunteersTable extends Migration
     {
         Schema::create('linked_in__volunteers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('linkedin_id');
+            $table->string('linkedin_id');
             $table->integer('volunteer_id');
             $table->string('role');
             $table->string('organization_name');

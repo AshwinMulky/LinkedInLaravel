@@ -9,5 +9,5 @@ class User_Company extends Model
     //
     protected $fillable = ['company_name', 'company_type', 'designation'];
 
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at','user_id'];
 }

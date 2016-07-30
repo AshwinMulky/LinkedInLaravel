@@ -14,13 +14,13 @@ class CreateLinkedInCertificationsTable extends Migration
     {
         Schema::create('linked_in__certifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('linkedin_id');
+            $table->string('linkedin_id');
             $table->integer('certifications_id');
             $table->string('name');
             $table->string('authority_name');
             $table->string('license_number');
-            $table->string('start-date');
-            $table->string('end-date');
+            $table->string('start_date');
+            $table->string('end_date');
             $table->timestamps();
         });
     }

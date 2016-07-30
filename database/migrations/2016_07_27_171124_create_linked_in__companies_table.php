@@ -14,7 +14,7 @@ class CreateLinkedInCompaniesTable extends Migration
     {
         Schema::create('linked_in__companies', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('linkedin_id');
+            $table->string('linkedin_id');
             $table->integer('company_id');
             $table->string('company_name');
             $table->string('company_type');

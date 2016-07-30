@@ -42,6 +42,6 @@ class User extends Authenticatable
 
     public function linkedin_profile()
     {
-        return $this->hasOne(LinkedIn_User::class);
+        return $this->hasOne(LinkedIn_User::class, 'linkedin_id','linkedin_id');
     }
 }

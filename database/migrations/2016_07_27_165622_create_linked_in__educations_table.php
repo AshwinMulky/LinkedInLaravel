@@ -14,12 +14,12 @@ class CreateLinkedInEducationsTable extends Migration
     {
         Schema::create('linked_in__educations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('linkedin_id');
+            $table->string('linkedin_id');
             $table->integer('educations_id');
-            $table->string('school-name');
-            $table->string('field-of-study');
-            $table->string('start-date');
-            $table->string('end-date');
+            $table->string('school_name');
+            $table->string('field_of_study');
+            $table->string('start_date');
+            $table->string('end_date');
             $table->string('degree');
             $table->string('activities');
             $table->text('notes');
