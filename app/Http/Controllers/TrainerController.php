@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\User;
+use App\Http\Models\User;
+use App\Http\Models\User_Skill;
 
 use DB;
 
@@ -17,47 +18,26 @@ class TrainerController extends Controller
     	$this->middleware('jwt.auth');
     }
 
-    public function listAll()
-    {
-    	return User::all()->where('user_type', 'Trainer');
-    }
-
-    public function filterTrainer(Request $request)
+    public function filterTrainers(Request $request)
     {
     	\JWTAuth::parseToken()->toUser();
 
-        $validation = \Validator::make($request->all(), [
-              'skill_name' => 'sometimes|required',
-              'experience_year' => 'sometimes|required',
-             /* 'experience_months' => 'sometimes|required',*/
-              'experience_level'=> 'sometimes|required'
-          ]);
+         $results = DB::table('users')->leftJoin('user__skills','users.id','=','user__skills.user_id')->where('users.id', '=', $request->trainer_id)->where('user__skills.id', '=', $request->skill_id)->where('user__skills.experience_year', '=', $request->experience)->get();
 
-         if($validation->fails())
-         {
-            return $validation->errors();
-         }
+         return response()->json(compact('results'));
 
-         $allUsers = User::all();
+    }
 
-         foreach ($allUsers as $user) {
-         	$hasSkills = $user->skills()->where('skill_name', $request->skill_name)/*->where('experience_year', $request->experience_year)->where('experience_level', $request->experience_level)*/->first();
+    public function listAllTrainers()
+    {
+        return DB::table('users')->where('user_type', 'Trainer')->select('id as Trainer_id', 'user_name as Trainer_name')->get();
+    }
 
-         	if(!empty($hasSkills))
-         	{
-         		//$users[] = $user->load('educations', 'skills', 'companies');
-         		$hasSkills->notEmpty = "yes";
-         		$users[] = $hasSkills;
-         	}
-         	else
-         	{
-         		$users[] = "No matching users";
-         	}
-         }
 
-         /*$users = DB::table('users')->join('user__skills','users.id','=','user__skills.user_id')->select('users.*')->where('user__skills.skill_name', $request->skill_name)->where('user__skills.experience_year', $request->experience_year)->where('user__skills.experience_level', $request->experience_level)->get();*/
+    public function listAllSkills()
+    {
+        //return User_Skill::all();
 
-         return response()->json(compact('users'));
-
+        return DB::table('user__skills')->select('id', 'skill_name')->get();
     }
 }

@@ -30,7 +30,8 @@ Route::group(['prefix' => 'api', 'middleware' => ['interceptor']], function(){
 	Route::get('auth/linkedin', 'LinkedInAuthenticationController@redirectToProvider');
 	Route::get('auth/linkedin/callback', 'LinkedInAuthenticationController@handleProviderCallback');
 
-	Route::get('list_all_trainers', 'TrainerController@listAll');
-	Route::post('list_trainers', 'TrainerController@filterTrainer');
+	Route::get('get_all_trainers', 'TrainerController@listAllTrainers');
+	Route::get('get_all_skills','TrainerController@listAllSkills');
+	Route::post('get_trainers', 'TrainerController@filterTrainers');
 	
 });

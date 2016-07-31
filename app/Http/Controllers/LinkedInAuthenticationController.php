@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\User;
-use App\LinkedIn_User;
+use App\Http\Models\User;
+use App\Http\Models\LinkedIn_User;
 
 use Socialite;
 

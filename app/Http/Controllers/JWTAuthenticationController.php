@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\User;
-use App\Company;
-use App\User_Skill;
-use App\User_Education;
-use App\User_Company;
+use App\Http\Models\User;
+use App\Http\Models\Company;
+use App\Http\Models\User_Skill;
+use App\Http\Models\User_Education;
+use App\Http\Models\User_Company;
 use Log;
 
 
