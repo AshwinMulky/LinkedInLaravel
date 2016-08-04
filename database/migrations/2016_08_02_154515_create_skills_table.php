@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserSkillsTable extends Migration
+class CreateSkillsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,9 @@ class CreateUserSkillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user__skills', function (Blueprint $table) {
+        Schema::create('skills', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('skills_id');
-            $table->integer('experience_year');
-            $table->integer('experience_months');
-            $table->string('experience_level');//expert,intermediate
+            $table->string('skill_name');
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ class CreateUserSkillsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('user__skills');
+        Schema::drop('skills');
     }
 }

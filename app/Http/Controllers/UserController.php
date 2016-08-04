@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Log;
+
 use App\Http\Requests;
 use App\Http\Models\User_Education;
 use App\Http\Models\User_Skill;
 use App\Http\Models\User_Company;
+use App\Http\Models\Skill;
 
 use DB;
 
@@ -31,6 +34,8 @@ class UserController extends Controller
     {
         $user = \JWTAuth::parseToken()->toUser();
 
+        //Log::info($user->id);
+
         $validation = \Validator::make($request->all(), [
 
               'user_type'=> 'required|in:Trainer,User,Company',
@@ -38,7 +43,7 @@ class UserController extends Controller
               'user_name' => 'sometimes|required_if:user_type,Trainer',
               'first_name' => 'sometimes|required_if:user_type,Trainer',
               'last_name'=> 'sometimes|required_if:user_type,Trainer',
-              'email' => 'sometimes|required_if:user_type,Trainer|email|unique:users,email,'.$user->id,
+              'email' => 'sometimes|required_if:user_type,Trainer,Company|email|unique:users,email,'.$user->id,
               'dob' => 'sometimes|required_if:user_type,Trainer',
               'sex' => 'sometimes|required_if:user_type,Trainer',
               'nationality'=> 'sometimes|required_if:user_type,Trainer',
@@ -99,20 +104,60 @@ class UserController extends Controller
             return $validation->errors();
          }
 
-        $user_skill = $user->skills()->where('skill_name', $request->skill_name)->first();
+        $skill_id = $this->getSkillId($request->skill_name); 
+
+        Log::info("USER ID " . $user->id);
+
+        
+        /*$user_skill = User_Skill::whereUserId($user->id)->whereSkillsId($skill_id)->get();*/
+        $user_skill = $user->user_skills()->where('skills_id', '=', $skill_id)->first();
+
+        Log::info("user_skill " . $user_skill);
 
         if(!empty($user_skill))
         {
+            Log::info("not empty user skill");
             $this->updateSkillFromRequest($request, $user_skill);
         }
         else
         {
-            $user_skill = User_Skill::create($request->all());
+            Log::info("create user skill");
+           // $request->skills_id = $skill_id;
+            $user_skill_data = $request->except('skill_name');
 
-            $user->skills()->save($user_skill);
+            $user_skill_data['skills_id'] = $skill_id ;
+
+            Log::info( $user_skill_data);
+
+            $user_skill = User_Skill::create($user_skill_data);
+
+           // Log::info("created user skill " .  $user_skill);
+
+            $user->user_skills()->save($user_skill);
         }
         
+
         return $this->getUserDetails($user);
+    }
+
+    private function getSkillId($skill_name)
+    {
+        $skill_id = Skill::whereSkillName($skill_name)->select('id')->value('id');
+
+         Log::info("First attempt SKILL ID ".$skill_id);
+
+        if(empty($skill_id))
+        {
+            Skill::create([
+                'skill_name' => $skill_name
+                ]);
+
+            $skill_id = Skill::whereSkillName($skill_name)->select('id')->value('id');
+        }
+
+        
+
+        return $skill_id;
     }
 
     public function updateUserEducation(Request $request)
@@ -423,7 +468,7 @@ class UserController extends Controller
 
     private function getUserDetails($user)
     {
-        $user->load('educations', 'skills', 'companies', 'linkedin_profile', 'linkedin_profile.contact_info', 'linkedin_profile.publications', 'linkedin_profile.patents', 'linkedin_profile.languages', 'linkedin_profile.skills', 'linkedin_profile.certifications', 'linkedin_profile.educations', 'linkedin_profile.courses', 'linkedin_profile.volunteer', 'linkedin_profile.postions', 'linkedin_profile.recommendations');
+        $user->load('educations', 'user_skills', 'companies', 'linkedin_profile', 'linkedin_profile.contact_info', 'linkedin_profile.publications', 'linkedin_profile.patents', 'linkedin_profile.languages', 'linkedin_profile.skills', 'linkedin_profile.certifications', 'linkedin_profile.educations', 'linkedin_profile.courses', 'linkedin_profile.volunteer', 'linkedin_profile.postions', 'linkedin_profile.recommendations' );
 
         $user = $this->hideUserFields($user);
 
@@ -438,7 +483,7 @@ class UserController extends Controller
 
         if($user->user_type == 'Company')
         {
-            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'user_name', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone_number_mobile', 'phone_number_home', 'phone_number_work','educations','skills','companies']);
+            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'user_name', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone_number_mobile', 'phone_number_home', 'phone_number_work','educations','user_skills','companies']);
         }
         else
         {

@@ -353,7 +353,6 @@ class ComposerStaticInitb057da386c7189cd3349b14b0f53c1ec
     );
 
     public static $classMap = array (
-        'CreateCompaniesTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_26_161533_create_companies_table.php',
         'CreateLinkedInCertificationsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_27_165240_create_linked_in__certifications_table.php',
         'CreateLinkedInCompaniesTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_27_171124_create_linked_in__companies_table.php',
         'CreateLinkedInCompanyProfilesTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_28_052504_create_linked_in__company__profiles_table.php',
@@ -369,6 +368,7 @@ class ComposerStaticInitb057da386c7189cd3349b14b0f53c1ec
         'CreateLinkedInUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_26_155539_create_linked_in__users_table.php',
         'CreateLinkedInVolunteersTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_27_170055_create_linked_in__volunteers_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+        'CreateSkillsTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_02_154515_create_skills_table.php',
         'CreateUserCompaniesTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_24_021326_create_user__companies_table.php',
         'CreateUserEducationsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_24_021313_create_user__educations_table.php',
         'CreateUserSkillsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_24_020408_create_user__skills_table.php',

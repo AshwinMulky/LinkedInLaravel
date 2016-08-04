@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'CreateCompaniesTable' => $baseDir . '/database/migrations/2016_07_26_161533_create_companies_table.php',
     'CreateLinkedInCertificationsTable' => $baseDir . '/database/migrations/2016_07_27_165240_create_linked_in__certifications_table.php',
     'CreateLinkedInCompaniesTable' => $baseDir . '/database/migrations/2016_07_27_171124_create_linked_in__companies_table.php',
     'CreateLinkedInCompanyProfilesTable' => $baseDir . '/database/migrations/2016_07_28_052504_create_linked_in__company__profiles_table.php',
@@ -22,6 +21,7 @@ return array(
     'CreateLinkedInUsersTable' => $baseDir . '/database/migrations/2016_07_26_155539_create_linked_in__users_table.php',
     'CreateLinkedInVolunteersTable' => $baseDir . '/database/migrations/2016_07_27_170055_create_linked_in__volunteers_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+    'CreateSkillsTable' => $baseDir . '/database/migrations/2016_08_02_154515_create_skills_table.php',
     'CreateUserCompaniesTable' => $baseDir . '/database/migrations/2016_07_24_021326_create_user__companies_table.php',
     'CreateUserEducationsTable' => $baseDir . '/database/migrations/2016_07_24_021313_create_user__educations_table.php',
     'CreateUserSkillsTable' => $baseDir . '/database/migrations/2016_07_24_020408_create_user__skills_table.php',

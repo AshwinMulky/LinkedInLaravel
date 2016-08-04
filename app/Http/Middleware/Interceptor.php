@@ -20,7 +20,7 @@ class Interceptor
 
         //Do logging
 
-        Log::info('We got a hit : '.$request);
+        //Log::info('We got a hit : '.$request);
 
         return $next($request);
     }

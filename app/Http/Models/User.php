@@ -25,7 +25,7 @@ class User extends Authenticatable
     ];
 
 
-    public function skills()
+    public function user_skills()
     {
         return $this->hasMany(User_Skill::class);
     }
