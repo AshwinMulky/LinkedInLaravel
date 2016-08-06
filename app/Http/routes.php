@@ -20,6 +20,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['interceptor']], function(){
 	
 	Route::post('authenticate','JWTAuthenticationController@authenticate');
 	Route::post('signup', 'JWTAuthenticationController@signup');
+	Route::post('signout', 'JWTAuthenticationController@signout');
 
 	Route::get('details', 'UserController@index');
 	Route::post('update_details', 'UserController@updateDetails');

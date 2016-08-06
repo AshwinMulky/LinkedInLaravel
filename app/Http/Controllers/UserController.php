@@ -54,6 +54,8 @@ class UserController extends Controller
               'twitter_account_name1'=> 'sometimes|required',
               'twitter_account_name2'=> 'sometimes|required',
               'password' => 'sometimes|required',
+              'self_rating' => 'sometimes|required_if:user_type,Trainer',
+              'pricing' => 'sometimes|required_if:user_type,Trainer',
 
               'company_name' => 'sometimes|required_if:user_type,Company',
               'company_type'=> 'sometimes|required_if:user_type,Company',
@@ -334,10 +336,15 @@ class UserController extends Controller
             $user->nationality = $request->nationality;
         }
 
-        /*if(!empty($request->user_type))
+        if(!empty($request->self_rating))
         {
-            $user->user_type = $request->user_type;
-        }*/
+            $user->self_rating = $request->self_rating;
+        }
+
+        if(!empty($request->pricing))
+        {
+            $user->pricing = $request->pricing;
+        }
 
         if(!empty($request->phone_number_mobile))
         {
@@ -483,7 +490,7 @@ class UserController extends Controller
 
         if($user->user_type == 'Company')
         {
-            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'user_name', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone_number_mobile', 'phone_number_home', 'phone_number_work','educations','user_skills','companies']);
+            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'user_name', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone_number_mobile', 'phone_number_home', 'phone_number_work','educations','user_skills','companies', 'self_rating', 'pricing']);
         }
         else
         {

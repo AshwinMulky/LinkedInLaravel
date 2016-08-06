@@ -12,9 +12,34 @@ use App\Http\Models\User_Education;
 use App\Http\Models\User_Company;
 use Log;
 
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+
 
 class JWTAuthenticationController extends Controller
 {
+
+    public function signout(Request $request)
+    {
+       try{
+
+        $user = \JWTAuth::parseToken()->toUser();
+
+        \JWTAuth::invalidate(\JWTAuth::getToken());
+
+        $user->online = false;
+        $user->save();
+
+       }//TokenBlacklistedException
+       catch (TokenBlacklistedException $e) {
+          // something went wrong
+          return response()->json(['error' => 'you have already been signed out'], 500);
+        }
+
+        return response()->json(['success' => 'you are signed out'], 200);
+
+    }
+
      public function authenticate(Request $request)
     {
     	$credentials = $request->only('email', 'password');
@@ -30,6 +55,11 @@ class JWTAuthenticationController extends Controller
             // something went wrong
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
+
+        $user = \JWTAuth::authenticate($token);
+
+        $user->online = true;
+        $user->save();
 
         // if no errors are encountered we can return a JWT
         return response()->json(compact('token'));
@@ -123,10 +153,12 @@ class JWTAuthenticationController extends Controller
                return response()->json(['error' => 'User already exists.'], HttpResponse::HTTP_CONFLICT);
            }
 
+           $user->online = true;
+           $user->save();
+
            $token = \JWTAuth::fromUser($user);
 
            return response()->json(compact('token'));
     }
 
-    
 }

@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('first_name');
             $table->string('last_name');
+            $table->text('headline');
             $table->string('dob');
             $table->string('sex');
             $table->string('nationality');
@@ -29,6 +30,10 @@ class CreateUsersTable extends Migration
             $table->string('phone_number_work');
             $table->string('twitter_account_name1');
             $table->string('twitter_account_name2');
+            $table->integer('self_rating');
+            $table->integer('pricing');
+            $table->boolean('online');
+            
 
             $table->string('company_name');   
             $table->string('company_type');       

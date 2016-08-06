@@ -36,6 +36,9 @@ class TrainerController extends Controller
 
          $trainer_ids = User::where('user_name', 'like', $searchString)->select('id')->get();
 
+         $skill_id_array[] = '';
+         $trainer_id_array[] = '1';
+
          foreach ($skills_ids as $skill_id) {
              $skill_id_array[] = $skill_id->id;
          }
@@ -69,7 +72,7 @@ class TrainerController extends Controller
 
         //Log::info($request->skill_id);
 
-         return response()->json(compact('results'));
+         return response()->json(compact('searchString'));
 
     }
 
