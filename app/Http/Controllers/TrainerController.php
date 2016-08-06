@@ -22,22 +22,51 @@ class TrainerController extends Controller
 
     public function filterTrainers(Request $request)
     {
-    	//\JWTAuth::parseToken()->toUser();
+    	$validation = \Validator::make($request->all(), [
+              'search' => 'required',
+              'trainer_id' => 'sometimes|required',
+              'experience_year' => 'sometimes|required',
+              'skill_id'=> 'sometimes|required'
+          ]);
 
-         /*$results = DB::table('users')->leftJoin('user__skills','users.id','=','user__skills.user_id')->where('users.id', '=', $request->trainer_id)->where('user__skills.id', '=', $request->skill_id)->where('user__skills.experience_year', '=', $request->experience)->get();*/
+         if($validation->fails())
+         {
+            return $validation->errors();
+         }
 
-         /*$users = User::whereId($request->trainer_id)->get();
 
-         $users_with_skill = User_Skill::whereSkillsId($request->skill_id)->where('experience_year', '>=', $request->experience_year)->select('user_id');*/
+        $skill_id_array[] = '';
+        $trainer_id_array[] = '';
 
-         $searchString = '%' . $request->search . '%';
+        if(!empty($request->skill_id))
+        {
+            $skill_id = $request->skill_id;
+        }
+        else
+        {
+            $skill_id = '';
+        }
+
+        if(!empty($request->experience_year) )
+        {
+            $experience_year = $request->experience_year;
+        }
+        else
+        {
+            $experience_year = '';
+        }
+            
+
+        $searchTerms = array('skill_id' => $skill_id, 'experience_year' => $experience_year);
+
+
+        $searchString = '%' . $request->search . '%';
 
          $skills_ids = Skill::where('skill_name', 'like', $searchString)->select('id')->get();
 
          $trainer_ids = User::where('user_name', 'like', $searchString)->select('id')->get();
 
-         $skill_id_array[] = '';
-         $trainer_id_array[] = '1';
+         
 
          foreach ($skills_ids as $skill_id) {
              $skill_id_array[] = $skill_id->id;
@@ -51,18 +80,27 @@ class TrainerController extends Controller
 
         /* $functionData = array('skill_id' => $request->skill_id, 'experience_year' => $request->experience_year, 'searchString' => $searchString, 'skill_id_array' => array($skill_id_array));*/
 
+        Log::info('searchString ' . $searchString);
+        //print_r(array_values($skill_id_array));
+       // print_r(array_values($trainer_id_array));
+
          $allUser = User::whereUserType('Trainer')->get();
 
          foreach ($allUser as $user) {
-            $elegibleList = $user->user_skills()->where(function ($query) use ($request) {
-                $query->where('skills_id', '=', $request->skill_id)
-                      ->where('experience_year', '>=', $request->experience_year);
+            $elegibleList = $user->user_skills()->where(function ($query) use ($searchTerms) {
+                $query->where('skills_id', '=', $searchTerms['skill_id'])
+                      ->where('experience_year', '>=', $searchTerms['experience_year']);
               })
              ->orWhereIn('skills_id', $skill_id_array)
              ->orWhere('experience_year', 'like', $searchString)
              ->get();
 
-             if (in_array($user->id, $trainer_id_array) || !empty($elegibleList)) {
+             //Log::info('elegibleList' . $elegibleList);
+             //Log::info(in_array($user->id, $trainer_id_array));
+             //Log::info);
+            // var_dump($elegibleList);
+
+             if (in_array($user->id, $trainer_id_array) or !$elegibleList->isEmpty()) {
                 $results[] = $user;
 
              }
@@ -72,7 +110,7 @@ class TrainerController extends Controller
 
         //Log::info($request->skill_id);
 
-         return response()->json(compact('searchString'));
+         return response()->json(compact('results'));
 
     }
 
