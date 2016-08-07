@@ -14,6 +14,15 @@ use App\Http\Models\Skill;
 
 use DB;
 
+/**
+ * @SWG\Resource(
+ *  apiVersion="1.0",
+ *  resourcePath="UserController",
+ *  description="User controller",
+ *  produces="['application/json']"
+ * )
+ */
+
 class UserController extends Controller
 {
     function __construct()
@@ -21,6 +30,23 @@ class UserController extends Controller
     	$this->middleware('jwt.auth');
     }
 
+    /**
+     * @SWG\Api(
+     *  path="/api/details",
+     *      @SWG\Operation(
+     *          method="GET",
+     *          summary="get user details",
+     *          @SWG\Parameter(
+     *          name="Authorization",
+     *          description="jwt token",
+     *          paramType="header",
+     *              required=true,
+     *              allowMultiple=false,
+     *              type="string"
+     *          ),
+     *      )
+     * )
+     */
     public function index()
     {
 
