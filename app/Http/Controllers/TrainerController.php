@@ -81,8 +81,10 @@ class TrainerController extends Controller
         /* $functionData = array('skill_id' => $request->skill_id, 'experience_year' => $request->experience_year, 'searchString' => $searchString, 'skill_id_array' => array($skill_id_array));*/
 
         Log::info('searchString ' . $searchString);
-        //print_r(array_values($skill_id_array));
-       // print_r(array_values($trainer_id_array));
+       /* print_r(array_values($skill_id_array));
+        print_r(array_values($trainer_id_array));
+        print_r(array_values($searchTerms));*/
+        
 
          $allUser = User::whereUserType('Trainer')->get();
 
@@ -92,16 +94,18 @@ class TrainerController extends Controller
                       ->where('experience_year', '>=', $searchTerms['experience_year']);
               })
              ->orWhereIn('skills_id', $skill_id_array)
-             ->orWhere('experience_year', 'like', $searchString)
+             ->orWhere('experience_year', '>=', $searchString)
              ->get();
 
-             //Log::info('elegibleList' . $elegibleList);
-             //Log::info(in_array($user->id, $trainer_id_array));
+             Log::info('elegibleList' . $elegibleList);
+             Log::info(in_array($user->id, $trainer_id_array));
              //Log::info);
             // var_dump($elegibleList);
 
-             if (in_array($user->id, $trainer_id_array) or !$elegibleList->isEmpty()) {
-                $results[] = $user;
+             if (in_array($user->id, $trainer_id_array) or !$elegibleList->isEmpty()) 
+             {
+
+                $results[] = $this->getUserDetails($user);
 
              }
 
@@ -128,5 +132,32 @@ class TrainerController extends Controller
 
         return Skill::select('id as skill_id', 'skill_name')->get();
 
+    }
+
+    private function getUserDetails($user)
+    {
+        $user->load('educations', 'user_skills', 'companies', 'linkedin_profile', 'linkedin_profile.contact_info', 'linkedin_profile.publications', 'linkedin_profile.patents', 'linkedin_profile.languages', 'linkedin_profile.skills', 'linkedin_profile.certifications', 'linkedin_profile.educations', 'linkedin_profile.courses', 'linkedin_profile.volunteer', 'linkedin_profile.postions', 'linkedin_profile.recommendations' );
+
+        $user = $this->hideUserFields($user);
+
+        return $user;
+    }
+
+    /*
+     *  
+     */
+    public function hideUserFields($user)
+    {
+
+        if($user->user_type == 'Company')
+        {
+            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'user_name', 'first_name', 'last_name', 'dob', 'sex', 'nationality', 'phone_number_mobile', 'phone_number_home', 'phone_number_work','educations','user_skills','companies', 'self_rating', 'pricing']);
+        }
+        else
+        {
+            $user->setHidden(['linkedin_id', 'password', 'remember_token', 'created_at', 'updated_at', 'company_name', 'company_type', 'website_url', 'industries', 'employee_count_range', 'specialties', 'locations', 'company_phone1', 'company_phone2', 'company_fax', 'description', 'stock_exchange', 'founded_year']);
+        }
+        
+        return $user;
     }
 }

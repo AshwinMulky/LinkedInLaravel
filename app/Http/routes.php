@@ -26,6 +26,8 @@ Route::group(['prefix' => 'api', 'middleware' => ['interceptor']], function(){
 	Route::post('update_details', 'UserController@updateDetails');
 	Route::post('update_user_skill', 'UserController@updateUserSkill');
 	Route::post('update_user_education', 'UserController@updateUserEducation');
+	//Route::post('update_user_rating', 'UserController@updateUserRating');
+
 	Route::post('update_user_company', 'UserController@updateUserCompany');
 
 	Route::get('auth/linkedin', 'LinkedInAuthenticationController@redirectToProvider');

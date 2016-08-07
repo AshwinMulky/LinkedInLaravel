@@ -54,7 +54,7 @@ class UserController extends Controller
               'twitter_account_name1'=> 'sometimes|required',
               'twitter_account_name2'=> 'sometimes|required',
               'password' => 'sometimes|required',
-              'self_rating' => 'sometimes|required_if:user_type,Trainer',
+              'self_rating' => 'sometimes|required_if:user_type,Trainer|numeric|between:0,5',
               'pricing' => 'sometimes|required_if:user_type,Trainer',
 
               'company_name' => 'sometimes|required_if:user_type,Company',
@@ -227,6 +227,22 @@ class UserController extends Controller
         
         return $this->getUserDetails($user);
     }
+
+   /* public function updateUserRating(Request $request)
+    {
+        $user = \JWTAuth::parseToken()->toUser();
+
+        $validation = \Validator::make($request->all(), [
+              'rating' => 'required|numeric|between:0,5'
+          ]);
+
+         if($validation->fails())
+         {
+            return $validation->errors();
+         }
+
+         //$user
+    }*/
 
     private function updateCompanyFromRequest(Request $request, $user_company)
     {
