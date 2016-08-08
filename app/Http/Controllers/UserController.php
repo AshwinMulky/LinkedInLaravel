@@ -55,7 +55,32 @@ class UserController extends Controller
     	return $this->getUserDetails($user);
     }
 
-    
+    /**
+     * @SWG\Api(
+     *  path="/api/update_details",
+     *      @SWG\Operation(
+     *          method="POST",
+     *          summary="update user details",
+     *          @SWG\Parameter(
+     *          name="Authorization",
+     *          description="jwt token - Bearer {token}",
+     *          paramType="header",
+     *              required=true,
+     *              allowMultiple=false,
+     *              type="string"
+     *          ),
+     *          
+     *          @SWG\Parameter(
+     *          name="body",
+     *          description="json parameters - EX:{&quot;user_type&quot;:&quot;Trainer&quot;} ",
+     *          paramType="body",
+     *              required=false,
+     *              allowMultiple=false,
+     *              type="string"
+     *          ),
+     *      )
+     * )
+     */
     public function updateDetails(Request $request)
     {
         $user = \JWTAuth::parseToken()->toUser();
