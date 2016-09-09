@@ -36,5 +36,8 @@ Route::group(['prefix' => 'api', 'middleware' => ['interceptor']], function(){
 	Route::get('get_all_trainers', 'TrainerController@listAllTrainers');
 	Route::get('get_all_skills','TrainerController@listAllSkills');
 	Route::post('get_trainers', 'TrainerController@filterTrainers');
+	Route::post('get_trainer_withId', 'TrainerController@getTrainer');
+
+	Route::post('book_trainer','TrainerController@bookTrainer');
 	
 });

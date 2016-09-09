@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Models\User;
 use App\Http\Models\User_Skill;
 use App\Http\Models\Skill;
+use App\Http\Models\Trainer_Booking;
 
 use DB;
 use Log;
@@ -18,6 +19,41 @@ class TrainerController extends Controller
     function __construct()
     {
     	$this->middleware('jwt.auth');
+    }
+
+    public function getTrainer(Request $request)
+    {
+        $user = User::whereUserType('Trainer')->get();
+
+        return $this->getUserDetails($user[0]);
+    }
+
+    public function bookTrainer(Request $request)
+    {
+        $validation = \Validator::make($request->all(), [
+              'trainer_id' => 'required',
+              'booking_date' => 'required',
+              'from_time' => 'required',
+              'to_time'=> 'required',
+              'subject'=> 'required'
+          ]);
+
+        if($validation->fails())
+         {
+            return $validation->errors();
+         }
+
+        try
+        {
+
+            Trainer_Booking::create($request->all());
+
+        } catch (Exception $e) {
+               return response()->json(['error' => 'Error while booking.'], HttpResponse::HTTP_CONFLICT);
+        }
+
+        return response()->json(['success' => 'succesfully booked.'], 201);
+        
     }
 
     public function filterTrainers(Request $request)

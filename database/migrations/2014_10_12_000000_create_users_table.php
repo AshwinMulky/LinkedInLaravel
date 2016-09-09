@@ -34,7 +34,6 @@ class CreateUsersTable extends Migration
             $table->integer('pricing');
             $table->boolean('online');
             
-
             $table->string('company_name');   
             $table->string('company_type');       
             $table->string('website_url');      
